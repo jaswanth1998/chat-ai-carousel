@@ -27,8 +27,72 @@ export interface AIModel {
 }
 
 export function ChatInterface() {
-  const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [sessions, setSessions] = useState<ChatSession[]>([
+    {
+      id: "example-1",
+      title: "What is machine learning?",
+      timestamp: new Date(Date.now() - 86400000), // 1 day ago
+      messages: [
+        {
+          id: "msg-1",
+          content: "What is machine learning?",
+          role: "user",
+          timestamp: new Date(Date.now() - 86400000),
+          modelId: "user",
+        },
+        {
+          id: "msg-2",
+          content: "Machine learning is a subset of artificial intelligence that enables computers to learn and make decisions from data without being explicitly programmed for every task. It uses algorithms to identify patterns in data and make predictions or decisions based on those patterns.",
+          role: "assistant",
+          timestamp: new Date(Date.now() - 86400000 + 1000),
+          modelId: "chatgpt",
+        },
+        {
+          id: "msg-3",
+          content: "Machine learning is a method of data analysis that automates analytical model building. It's based on the idea that systems can learn from data, identify patterns and make decisions with minimal human intervention. Think of it as teaching computers to recognize patterns the way humans do, but at scale.",
+          role: "assistant",
+          timestamp: new Date(Date.now() - 86400000 + 2000),
+          modelId: "claude",
+        },
+        {
+          id: "msg-4",
+          content: "Machine learning is a branch of AI that focuses on building systems that learn from data. Instead of programming explicit rules, we feed algorithms large amounts of data so they can automatically find patterns and make predictions. It's like giving a computer the ability to improve its performance on a task through experience.",
+          role: "assistant",
+          timestamp: new Date(Date.now() - 86400000 + 3000),
+          modelId: "deepseek",
+        },
+      ],
+    },
+    {
+      id: "example-2",
+      title: "Best programming languages...",
+      timestamp: new Date(Date.now() - 172800000), // 2 days ago
+      messages: [
+        {
+          id: "msg-5",
+          content: "What are the best programming languages to learn in 2024?",
+          role: "user",
+          timestamp: new Date(Date.now() - 172800000),
+          modelId: "user",
+        },
+        {
+          id: "msg-6",
+          content: "For 2024, I'd recommend: 1) Python - excellent for AI/ML, data science, and web development, 2) JavaScript/TypeScript - essential for web development, 3) Rust - growing rapidly for systems programming, 4) Go - great for backend services, and 5) Swift/Kotlin for mobile development.",
+          role: "assistant",
+          timestamp: new Date(Date.now() - 172800000 + 1000),
+          modelId: "chatgpt",
+        },
+        {
+          id: "msg-7",
+          content: "The top languages for 2024 depend on your goals: Python remains king for AI/data science, JavaScript is still essential for web development, TypeScript adds type safety, Rust offers memory safety for systems programming, and Go provides simplicity for cloud services. Consider your career path when choosing!",
+          role: "assistant",
+          timestamp: new Date(Date.now() - 172800000 + 2000),
+          modelId: "claude",
+        },
+      ],
+    },
+  ]);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>("example-1");
   const [aiModels, setAiModels] = useState<AIModel[]>([
     { id: "chatgpt", name: "ChatGPT", color: "bg-green-50 border-green-200", isActive: true },
     { id: "claude", name: "Claude", color: "bg-blue-50 border-blue-200", isActive: true },
