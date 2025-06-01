@@ -1,5 +1,5 @@
 
-import { Plus, MessageSquare } from "lucide-react";
+import { Plus, MessageSquare, ChevronDown } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,6 +13,13 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import type { ChatSession, AIModel } from "./ChatInterface";
 
 interface ChatSidebarProps {
@@ -22,6 +29,7 @@ interface ChatSidebarProps {
   onNewChat: () => void;
   onSelectSession: (sessionId: string) => void;
   onToggleModel: (modelId: string) => void;
+  onNewChatWithModel: (modelIds: string[]) => void;
 }
 
 export function ChatSidebar({
@@ -31,17 +39,57 @@ export function ChatSidebar({
   onNewChat,
   onSelectSession,
   onToggleModel,
+  onNewChatWithModel,
 }: ChatSidebarProps) {
+  const handleNewChatWithSpecificModel = (modelId: string) => {
+    onNewChatWithModel([modelId]);
+  };
+
+  const handleNewChatWithAllModels = () => {
+    const activeModelIds = aiModels.filter(model => model.isActive).map(model => model.id);
+    onNewChatWithModel(activeModelIds);
+  };
+
   return (
     <Sidebar className="border-r border-gray-200">
       <SidebarHeader className="p-4 border-b border-gray-100">
-        <Button
-          onClick={onNewChat}
-          className="w-full bg-gray-900 hover:bg-gray-800 text-white rounded-lg h-11 text-sm font-medium transition-colors"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          New Chat
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={onNewChat}
+            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white rounded-lg h-11 text-sm font-medium transition-colors"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            New Chat
+          </Button>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-11 w-11 border-gray-200 hover:bg-gray-50"
+              >
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onClick={handleNewChatWithAllModels}>
+                <Plus className="w-4 h-4 mr-2" />
+                New Chat (All Active)
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {aiModels.map((model) => (
+                <DropdownMenuItem
+                  key={model.id}
+                  onClick={() => handleNewChatWithSpecificModel(model.id)}
+                >
+                  <div className={`w-3 h-3 rounded-full mr-2 ${model.color.split(' ')[0]}`} />
+                  New Chat with {model.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </SidebarHeader>
       
       <SidebarContent className="p-2">

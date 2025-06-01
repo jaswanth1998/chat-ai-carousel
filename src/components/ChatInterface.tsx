@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ChatSidebar } from "@/components/ChatSidebar";
@@ -113,6 +112,26 @@ export function ChatInterface() {
     setCurrentSessionId(newSession.id);
   };
 
+  const createNewChatWithModel = (modelIds: string[]) => {
+    const newSession: ChatSession = {
+      id: Date.now().toString(),
+      title: "New Chat",
+      timestamp: new Date(),
+      messages: [],
+    };
+    
+    // Temporarily set only the specified models as active
+    setAiModels(prev =>
+      prev.map(model => ({
+        ...model,
+        isActive: modelIds.includes(model.id)
+      }))
+    );
+    
+    setSessions([newSession, ...sessions]);
+    setCurrentSessionId(newSession.id);
+  };
+
   const sendMessage = (content: string) => {
     if (!currentSessionId) {
       createNewChat();
@@ -171,6 +190,7 @@ export function ChatInterface() {
           onNewChat={createNewChat}
           onSelectSession={selectSession}
           onToggleModel={toggleModel}
+          onNewChatWithModel={createNewChatWithModel}
         />
         <ChatArea
           currentSession={currentSession}
