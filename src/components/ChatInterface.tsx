@@ -180,6 +180,25 @@ export function ChatInterface() {
     );
   };
 
+  const editMessage = (messageId: string, newContent: string) => {
+    if (!currentSessionId) return;
+
+    setSessions(prevSessions =>
+      prevSessions.map(session =>
+        session.id === currentSessionId
+          ? {
+              ...session,
+              messages: session.messages.map(msg =>
+                msg.id === messageId
+                  ? { ...msg, content: newContent }
+                  : msg
+              ),
+            }
+          : session
+      )
+    );
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -196,6 +215,7 @@ export function ChatInterface() {
           currentSession={currentSession}
           activeModels={activeModels}
           onSendMessage={sendMessage}
+          onEditMessage={editMessage}
         />
       </div>
     </SidebarProvider>
