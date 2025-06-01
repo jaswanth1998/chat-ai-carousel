@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ChatWindow } from "@/components/ChatWindow";
@@ -10,10 +11,9 @@ interface ChatAreaProps {
   currentSession: ChatSession | undefined;
   activeModels: AIModel[];
   onSendMessage: (content: string) => void;
-  onEditMessage: (messageId: string, newContent: string) => void;
 }
 
-export function ChatArea({ currentSession, activeModels, onSendMessage, onEditMessage }: ChatAreaProps) {
+export function ChatArea({ currentSession, activeModels, onSendMessage }: ChatAreaProps) {
   const [selectedModel, setSelectedModel] = useState<string>(activeModels[0]?.id || "");
   const isMobile = useIsMobile();
 
@@ -67,7 +67,6 @@ export function ChatArea({ currentSession, activeModels, onSendMessage, onEditMe
                   model={model}
                   messages={getMessagesForModel(model.id)}
                   className="flex-1"
-                  onEditMessage={onEditMessage}
                 />
               </TabsContent>
             ))}
@@ -101,7 +100,6 @@ export function ChatArea({ currentSession, activeModels, onSendMessage, onEditMe
               model={model}
               messages={getMessagesForModel(model.id)}
               className="flex-1"
-              onEditMessage={onEditMessage}
             />
           </div>
         ))}
